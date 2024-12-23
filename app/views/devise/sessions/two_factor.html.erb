@@ -1,0 +1,68 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Header -->
+    <div>
+      <div class="flex justify-center">
+        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-indigo-600 text-white">
+          <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Two-Factor Authentication
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Enter the verification code from your authenticator app
+      </p>
+    </div>
+
+    <!-- OTP Form -->
+    <div class="bg-white shadow-2xl rounded-2xl p-8">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post, data: { turbo: false }, html: { class: "space-y-6" }) do |f| %>
+        <!-- Hidden fields to maintain login state -->
+        <%= f.hidden_field :login, value: @user&.email || @user&.mobile_no %>
+        <%= f.hidden_field :password, value: params.dig(:user, :password) %>
+        <%= f.hidden_field :remember_me, value: params.dig(:user, :remember_me) %>
+
+        <div>
+          <label for="user_otp_attempt" class="block text-sm font-medium text-gray-700 text-center mb-3">
+            Authentication Code
+          </label>
+          <%= f.text_field :otp_attempt,
+              placeholder: "000000",
+              maxlength: "6",
+              pattern: "[0-9]{6}",
+              required: true,
+              autofocus: true,
+              class: "appearance-none block w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150" %>
+        </div>
+
+        <div class="space-y-3">
+          <%= f.submit "Verify",
+              class: "w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 cursor-pointer" %>
+
+          <%= link_to "Cancel", new_user_session_path,
+              class: "w-full flex justify-center py-3 px-4 border-2 border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150" %>
+        </div>
+      <% end %>
+
+      <!-- Help Section -->
+      <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-blue-800">Trouble signing in?</h3>
+            <p class="mt-1 text-xs text-blue-700">
+              Open your authenticator app and enter the 6-digit code. Codes expire every 30 seconds.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

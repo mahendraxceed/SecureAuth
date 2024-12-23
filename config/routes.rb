@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
+  # Two-Factor Authentication routes
+  resource :two_factor_authentication, only: [], controller: 'two_factor_authentication' do
+    collection do
+      get :enable
+      post :confirm
+      delete :disable
+      post :verify_otp
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

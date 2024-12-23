@@ -1,0 +1,115 @@
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Two-Factor Authentication</h1>
+      <p class="mt-2 text-gray-600">Add an extra layer of security to your account</p>
+    </div>
+
+    <!-- 2FA Status Card -->
+    <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
+      <div class="p-8">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center space-x-4">
+            <div class="<%= @two_factor_enabled ? 'bg-green-100' : 'bg-gray-100' %> rounded-full p-3">
+              <svg class="h-8 w-8 <%= @two_factor_enabled ? 'text-green-600' : 'text-gray-400' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900">
+                Two-Factor Authentication is <%= @two_factor_enabled ? 'Enabled' : 'Disabled' %>
+              </h2>
+              <p class="text-sm text-gray-600 mt-1">
+                <% if @two_factor_enabled %>
+                  Your account is protected with 2FA
+                <% else %>
+                  Protect your account with an authenticator app
+                <% end %>
+              </p>
+            </div>
+          </div>
+
+          <% if @two_factor_enabled %>
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              Active
+            </span>
+          <% else %>
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+              <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+              Inactive
+            </span>
+          <% end %>
+        </div>
+
+        <div class="border-t border-gray-200 pt-6">
+          <% if @two_factor_enabled %>
+            <div class="space-y-4">
+              <p class="text-gray-700">
+                Two-factor authentication adds an additional layer of security to your account.
+                Each time you sign in, you'll need to enter a code from your authenticator app.
+              </p>
+
+              <%= form_with url: disable_two_factor_authentication_path, method: :delete, class: "mt-6" do |f| %>
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                  <div class="flex">
+                    <div class="flex-shrink-0">
+                      <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <h3 class="text-sm font-medium text-red-800">Disable Two-Factor Authentication</h3>
+                      <p class="mt-2 text-sm text-red-700">
+                        To disable 2FA, please enter your password:
+                      </p>
+                      <div class="mt-4">
+                        <%= f.password_field :password, placeholder: "Enter your password",
+                            class: "appearance-none block w-full px-3 py-2 border border-red-300 rounded-lg placeholder-red-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-150 sm:text-sm" %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <%= f.submit "Disable Two-Factor Authentication",
+                    class: "w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition duration-150 ease-in-out cursor-pointer",
+                    data: { confirm: "Are you sure you want to disable two-factor authentication? This will make your account less secure." } %>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold text-gray-900">How it works</h3>
+              <ol class="space-y-3">
+                <li class="flex items-start">
+                  <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-medium">1</span>
+                  <p class="ml-3 text-gray-700">Download an authenticator app like Google Authenticator or Authy</p>
+                </li>
+                <li class="flex items-start">
+                  <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-medium">2</span>
+                  <p class="ml-3 text-gray-700">Scan the QR code with your authenticator app</p>
+                </li>
+                <li class="flex items-start">
+                  <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-medium">3</span>
+                  <p class="ml-3 text-gray-700">Enter the verification code to complete setup</p>
+                </li>
+              </ol>
+
+              <%= link_to "Enable Two-Factor Authentication",
+                  enable_two_factor_authentication_path,
+                  class: "mt-6 w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Home -->
+    <div class="mt-6 text-center">
+      <%= link_to "← Back to Home", root_path, class: "text-blue-600 hover:text-blue-700 font-medium" %>
+    </div>
+  </div>
+</div>

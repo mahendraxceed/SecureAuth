@@ -37,6 +37,9 @@ gem "jbuilder"
 
 # Authentication
 gem "devise"
+gem "devise-two-factor", '~> 6.1.0'
+gem "attr_encrypted", "~> 4.0.0"
+gem "rqrcode"
 
 # CSS framework
 gem "tailwindcss-rails"
